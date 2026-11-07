@@ -9,6 +9,7 @@ Keep this concise and specific to your implementation.
 - Which operation(s) do you predict may scale poorly?
 - What will you investigate first?
 
+```text
 Initial data:
 
 Baseline world-query workload
@@ -22,10 +23,25 @@ Checksum: 6267100
 - FindLocation and FindConnection (looping through all elements and comparisons)
 - Looping through elements
 - Improve Connection storage in WorldQueries.cs
+```
 
 ## 2. Data representation
 
 Describe important changes/retained choices, operations affected, and time/memory trade-offs.
+
+```text
+Implemented a dictionary for Connections to avoid looping through the whole list. Grouped connections by FromLocationId.
+Implemented a dictionary for Locations for a faster retrieval on average.
+
+Trade-off increased memory usage due to two additional containers for a lower execution time.
+
+Baseline world-query workload
+Locations: 2500
+Connections: 9800
+Iterations: 5000
+Elapsed: 0 ms
+Checksum: 6267100
+```
 
 ## 3. Algorithms and adaptation
 
@@ -35,8 +51,8 @@ Explain your route finder at a useful high level and how the travel-budget query
 
 | Operation					 | Your representation/algorithm | Complexity | Short explanation |
 | ---						 | ---							 | ---		  | ---				  |
-| Find location by ID		 |								 |			  | |
-| Get outgoing connections	 |								 |			  | |
+| Find location by ID		 |	Dictionary lookup			 |	O(1)	  | optimization	  |
+| Get outgoing connections	 |	Dictionary lookup			 |	O(1)	  | optimization	  |
 | Priority queue enqueue	 |								 |			  | |
 | Priority queue dequeue-min |								 |			  | |
 | Route finding				 |								 |			  | |
@@ -52,6 +68,10 @@ Record reproducible before/after measurements for loading/preparation, repeated 
 ## 7. Development reflection
 
 Describe one bug, wrong assumption, failed approach, or surprising result and how you investigated it.
+
+```text
+Indexing in a dictionary for an inexistent key created an entry for that key.
+```
 
 ## 8. Tools and AI assistance
 
