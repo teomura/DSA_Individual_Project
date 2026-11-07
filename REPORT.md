@@ -31,9 +31,15 @@ Describe important changes/retained choices, operations affected, and time/memor
 
 ```text
 Implemented a dictionary for Connections to avoid looping through the whole list. Grouped connections by FromLocationId.
-Implemented a dictionary for Locations for a faster retrieval on average.
 
-Trade-off increased memory usage due to two additional containers for a lower execution time.
+Baseline world-query workload
+Locations: 2500
+Connections: 9800
+Iterations: 5000
+Elapsed: 70 ms
+Checksum: 6267100
+
+Implemented a dictionary for Locations for a faster retrieval on average.
 
 Baseline world-query workload
 Locations: 2500
@@ -41,6 +47,8 @@ Connections: 9800
 Iterations: 5000
 Elapsed: 0 ms
 Checksum: 6267100
+
+Trade-off increased memory usage due to two additional containers for a lower execution time.
 ```
 
 ## 3. Algorithms and adaptation
