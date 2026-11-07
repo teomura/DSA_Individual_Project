@@ -9,6 +9,20 @@ Keep this concise and specific to your implementation.
 - Which operation(s) do you predict may scale poorly?
 - What will you investigate first?
 
+Initial data:
+
+Baseline world-query workload
+Locations: 2500
+Connections: 9800
+Iterations: 5000
+Elapsed: 616 ms
+Checksum: 6267100
+
+- Arrays of Location and Connection
+- FindLocation and FindConnection (looping through all elements and comparisons)
+- Looping through elements
+- Improve Connection storage in WorldQueries.cs
+
 ## 2. Data representation
 
 Describe important changes/retained choices, operations affected, and time/memory trade-offs.
@@ -19,13 +33,13 @@ Explain your route finder at a useful high level and how the travel-budget query
 
 ## 4. Complexity
 
-| Operation | Your representation/algorithm | Complexity | Short explanation |
-| --- | --- | --- | --- |
-| Find location by ID | | | |
-| Get outgoing connections | | | |
-| Priority queue enqueue | | | |
-| Priority queue dequeue-min | | | |
-| Route finding | | | |
+| Operation					 | Your representation/algorithm | Complexity | Short explanation |
+| ---						 | ---							 | ---		  | ---				  |
+| Find location by ID		 |								 |			  | |
+| Get outgoing connections	 |								 |			  | |
+| Priority queue enqueue	 |								 |			  | |
+| Priority queue dequeue-min |								 |			  | |
+| Route finding				 |								 |			  | |
 
 ## 5. Correctness and testing
 
