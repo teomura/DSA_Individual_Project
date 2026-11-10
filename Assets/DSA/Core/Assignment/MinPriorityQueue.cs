@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FrontierDispatch.Core
 {
@@ -31,7 +32,9 @@ namespace FrontierDispatch.Core
         public void Enqueue(T item, int priority)
         {
             // TODO: insert the new entry and restore the min-heap invariant.
-            throw new NotImplementedException();
+            _heap.Add(new Entry(item, priority));
+            int currentIndex = _heap.Count - 1;
+            SiftUp(currentIndex);
         }
 
         /// <summary>
@@ -43,7 +46,11 @@ namespace FrontierDispatch.Core
         public T Peek()
         {
             // TODO: return the current minimum without changing the queue.
-            throw new NotImplementedException();
+            if (_heap.Count == 0)
+            {
+                throw new InvalidOperationException("The dispatch queue is empty.");
+            }
+            return _heap[0].Item;
         }
 
         /// <summary>
@@ -55,7 +62,71 @@ namespace FrontierDispatch.Core
         public T Dequeue()
         {
             // TODO: remove the minimum item and restore the min-heap invariant.
-            throw new NotImplementedException();
+            if (_heap.Count == 0)
+            {
+                throw new InvalidOperationException("The dispatch queue is empty.");
+            }
+            Entry root = _heap[0];
+            Swap(_heap.Count - 1, 0);
+            _heap.RemoveAt(_heap.Count - 1);
+            SiftDown(0);
+
+            return root.Item;
+        }
+
+        private void SiftUp(int index)
+        {
+            while (index > 0)
+            {
+                int parentIndex = ParentIndex(index);
+                if (_heap[parentIndex].Priority > _heap[index].Priority)
+                {
+                    Swap(parentIndex, index);
+                    index = parentIndex;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        private void SiftDown(int index)
+        {
+            while (index < _heap.Count)
+            {
+                int leftIndex = LeftChildIndex(index);
+                int rightIndex = RightChildIndex(index);
+                if (leftIndex < _heap.Count && rightIndex < _heap.Count)
+                {
+                    int minPriorityIndex = 0;
+                    if (_heap[leftIndex].Priority > _heap[rightIndex].Priority)
+                    {
+                        minPriorityIndex = rightIndex;
+                    }
+                    else
+                    {
+                        minPriorityIndex = leftIndex;
+                    }
+                    if (_heap[index].Priority > _heap[minPriorityIndex].Priority)
+                    {
+                        Swap(index, minPriorityIndex);
+                        index = minPriorityIndex;
+                    }
+                }
+                else if (leftIndex < _heap.Count)
+                {
+                    if (_heap[index].Priority < _heap[leftIndex].Priority)
+                    {
+                        Swap(index, leftIndex);
+                    }
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -71,6 +142,28 @@ namespace FrontierDispatch.Core
 
             public T Item { get; }
             public int Priority { get; }
+        }
+
+        private static int ParentIndex(int index)
+        {
+            return (index - 1) / 2;
+        }
+
+        private static int LeftChildIndex(int index)
+        {
+            return 2 * index + 1;
+        }
+
+        private static int RightChildIndex(int index)
+        {
+            return 2 * index + 2;
+        }
+
+        private void Swap(int a, int b)
+        {
+            Entry temp = _heap[a];
+            _heap[a] = _heap[b];
+            _heap[b] = temp;
         }
     }
 }
