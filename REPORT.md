@@ -48,7 +48,7 @@ Iterations: 5000
 Elapsed: 0 ms
 Checksum: 6267100
 
-Trade-off increased memory usage due to two additional containers for a lower execution time.
+Trade-off increased memory usage due to two additional containers for a lower execution time. Spent more execution time at creating the containers.
 ```
 
 ## 3. Algorithms and adaptation
