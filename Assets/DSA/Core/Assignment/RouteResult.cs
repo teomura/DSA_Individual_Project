@@ -39,5 +39,15 @@ namespace FrontierDispatch.Core
         /// of wall-clock timing.
         /// </summary>
         public int ExpandedCount { get; }
+
+        public static RouteResult Success(IReadOnlyList<int> locationIds, int totalCost, int expandedCount)
+        {
+            return new RouteResult(true, locationIds, totalCost, expandedCount);
+        }
+
+        public static RouteResult NotFound(int expandedCount)
+        {
+            return new RouteResult(false, Array.Empty<int>(), 0, expandedCount);
+        }
     }
 }

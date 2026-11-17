@@ -74,6 +74,15 @@ namespace FrontierDispatch.Core
             return root.Item;
         }
 
+        public int LowestPriority()
+        {
+            if (_heap.Count == 0)
+            {
+                throw new InvalidOperationException("The dispatch queue is empty.");
+            }
+            return _heap[0].Priority;
+        }
+
         private void SiftUp(int index)
         {
             while (index > 0)
@@ -112,6 +121,10 @@ namespace FrontierDispatch.Core
                     {
                         Swap(index, minPriorityIndex);
                         index = minPriorityIndex;
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
                 else if (leftIndex < _heap.Count)

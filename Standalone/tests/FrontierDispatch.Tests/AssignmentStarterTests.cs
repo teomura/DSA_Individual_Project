@@ -26,7 +26,7 @@ namespace FrontierDispatch.Tests
             Assert.That(queue.Dequeue(), Is.EqualTo("cheap"));
         }
 
-        [Test, Ignore("Phase 4: enable when implementing Dijkstra route finding.")]
+        [Test]
         public void Dijkstra_StartEqualsGoal_ReturnsZeroCostRoute()
         {
             var finder = new DijkstraRouteFinder(WorldDatasetFactory.CreateSmall());
@@ -34,6 +34,16 @@ namespace FrontierDispatch.Tests
             Assert.That(result.Found, Is.True);
             Assert.That(result.TotalCost, Is.EqualTo(0));
             Assert.That(result.LocationIds, Is.EqualTo(new[] { 0 }));
+        }
+
+        [Test]
+        public void Dijkstra_MediumWorld_ReturnsLowestCostRoute()
+        {
+            var finder = new DijkstraRouteFinder(WorldDatasetFactory.CreateMedium());
+            RouteResult result = finder.FindRoute(0, 254);
+            Assert.That(result.Found, Is.True);
+            Assert.That(result.TotalCost, Is.EqualTo(25));
+            Assert.That(result.LocationIds, Is.EqualTo(new[] { 0, 50, 100, 101, 151, 152, 202, 203, 253, 254 }));
         }
 
         [Test, Ignore("Phase 5: enable when implementing bounded reachability.")]

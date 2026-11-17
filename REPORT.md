@@ -61,10 +61,10 @@ Explain your route finder at a useful high level and how the travel-budget query
 | ---						 | ---							 | ---		  | ---				  |
 | Find location by ID		 |	Dictionary lookup			 |	O(1)	  | optimization	  |
 | Get outgoing connections	 |	Dictionary lookup			 |	O(1)	  | optimization	  |
-| Priority queue enqueue	 |								 |			  | |
-| Priority queue dequeue-min |								 |			  | |
-| Route finding				 |								 |			  | |
-
+| Priority queue enqueue	 |	Binary heap					 |	O(log n)  | the complexity increases due to sifting and swapping|
+| Priority queue dequeue-min |	Binary heap					 |	O(log n)  | the complexity increases due to sifting and swapping|
+| Route finding				 |	Dijkstra + priority queue	 |O((V+E)logV)| always processing the node with the lowest cost in the frontier|
+											(binary heap)
 ## 5. Correctness and testing
 
 Important tests/edge cases and what they demonstrate.
@@ -77,13 +77,23 @@ Record reproducible before/after measurements for loading/preparation, repeated 
 
 Describe one bug, wrong assumption, failed approach, or surprising result and how you investigated it.
 
+
 ```text
 Indexing in a dictionary for an inexistent key created an entry for that key.
+
+On a medium world, finding a route led to an infinite loop due to a bug in the MinPriorityQueue where I wouldn't exit if there were two entries with equal or lower priorities.
+I investigated it by debugging and found that the index never changed from 0, thus never exiting from the loop. Added a break on the correct condition.
+
 ```
 
 ## 8. Tools and AI assistance
 
 Briefly describe relevant assistance, if any.
+
+```text
+Used Gemini to get a route to use in the tests.
+
+```
 
 ## 9. VG extension
 

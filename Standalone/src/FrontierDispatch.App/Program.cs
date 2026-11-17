@@ -19,6 +19,9 @@ Console.WriteLine($"Find 734: {queries.FindLocationById(734)?.Name ?? "missing"}
 Console.WriteLine();
 Console.WriteLine("Run with --baseline to record the supplied baseline workload.");
 
+var finder = new DijkstraRouteFinder(WorldDatasetFactory.CreateSmall());
+RouteResult result = finder.FindRoute(0, 24);
+
 static void RunBaseline()
 {
     // Build the dataset before timing the repeated runtime queries.
