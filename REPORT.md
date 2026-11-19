@@ -16,7 +16,9 @@ Baseline world-query workload
 Locations: 2500
 Connections: 9800
 Iterations: 5000
-Elapsed: 616 ms
+Bytes used: 1093072
+Elapsed creation: 2 ms
+Elapsed: 656 ms
 Checksum: 6267100
 
 - Arrays of Location and Connection
@@ -36,7 +38,9 @@ Baseline world-query workload
 Locations: 2500
 Connections: 9800
 Iterations: 5000
-Elapsed: 70 ms
+Bytes used: 1528720
+Elapsed creation: 2 ms
+Elapsed: 71 ms
 Checksum: 6267100
 
 Implemented a dictionary for Locations for a faster retrieval on average.
@@ -45,6 +49,8 @@ Baseline world-query workload
 Locations: 2500
 Connections: 9800
 Iterations: 5000
+Bytes used: 1744368
+Elapsed creation: 3 ms
 Elapsed: 0 ms
 Checksum: 6267100
 
@@ -59,12 +65,12 @@ Explain your route finder at a useful high level and how the travel-budget query
 
 | Operation					 | Your representation/algorithm | Complexity | Short explanation |
 | ---						 | ---							 | ---		  | ---				  |
-| Find location by ID		 |	Dictionary lookup			 |	O(1)	  | optimization	  |
-| Get outgoing connections	 |	Dictionary lookup			 |	O(1)	  | optimization	  |
+| Find location by ID		 |	Dictionary lookup			 |	O(1)	  | optimization trade-off - increased memory usage for faster execution time|
+| Get outgoing connections	 |	Dictionary lookup			 |	O(1)	  | optimization trade-off - increased memory usage for faster execution time|
 | Priority queue enqueue	 |	Binary heap					 |	O(log n)  | the complexity increases due to sifting and swapping|
 | Priority queue dequeue-min |	Binary heap					 |	O(log n)  | the complexity increases due to sifting and swapping|
 | Route finding				 |	Dijkstra + priority queue	 |O((V+E)logV)| always processing the node with the lowest cost in the frontier|
-											(binary heap)
+|							 |				(binary heap)	 |				
 ## 5. Correctness and testing
 
 Important tests/edge cases and what they demonstrate.
@@ -72,6 +78,26 @@ Important tests/edge cases and what they demonstrate.
 ## 6. Performance investigation
 
 Record reproducible before/after measurements for loading/preparation, repeated runtime work, and relevant allocation behavior. Explain what changed and why.
+
+
+
+| Measurement					 | Baseline			 |  Improved		 |
+| ---							 | ---				 | ---				 |
+| World preparation              | 2 ms				 ||
+| Repeated lookup/query workload | 656 ms		   	 | 0 ms				 |
+| Allocated bytes                | 1093072			 ||
+
+//describe the workload, how measurements were collected, and what
+conclusions can reasonably be drawn.
+
+```text
+Collected operation times with Stopwatch and allocated bytes with GC before and after execution.
+
+
+World preparation: 
+Repeated lookup/query workload: changed storage for Locations and Connections to use Dictionaries for faster average retrieval (O(1)).
+Allocated bytes:
+```
 
 ## 7. Development reflection
 

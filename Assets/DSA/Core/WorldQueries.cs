@@ -60,14 +60,15 @@ namespace FrontierDispatch.Core
         public IReadOnlyList<Connection> FindOutgoingConnections(int fromLocationId)
         {
             var result = _worldConnections[fromLocationId] ?? new List<Connection>();
-            /* for (int i = 0; i < _world.Connections.Count; ++i)
-             {
-                 Connection connection = _world.Connections[i];
-                 if (connection.FromLocationId == fromLocationId)
-                 {
-                     result.Add(connection);
-                 }
-             }*/
+            /*var result = new List<Connection>();
+            for (int i = 0; i < _world.Connections.Count; ++i)
+            {
+                Connection connection = _world.Connections[i];
+                if (connection.FromLocationId == fromLocationId)
+                {
+                    result.Add(connection);
+                }
+            }*/
 
             return result;
         }
