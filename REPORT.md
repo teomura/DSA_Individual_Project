@@ -78,12 +78,12 @@ The reachability algorithm uses the same base Dijkstra approach but instead of s
 
 | Operation					 | Your representation/algorithm | Complexity | Short explanation |
 | ---						 | ---							 | ---		  | ---				  |
-| Find location by ID		 |	Dictionary lookup			 |	O(1)	  | optimization trade-off - increased memory usage for faster execution time|
-| Get outgoing connections	 |	Dictionary lookup			 |	O(1)	  | optimization trade-off - increased memory usage for faster execution time|
+| Find location by ID		 |	Dictionary lookup			 |	O(1) average	  | optimization trade-off - increased memory usage for faster execution time|
+| Get outgoing connections	 |	Dictionary lookup			 |	O(1) average	  | optimization trade-off - increased memory usage for faster execution time|
 | Priority queue enqueue	 |	Binary heap					 |	O(log n)  | the complexity increases due to sifting and swapping|
 | Priority queue dequeue-min |	Binary heap					 |	O(log n)  | the complexity increases due to sifting and swapping|
-| Route finding				 |	Dijkstra + priority queue	 |O((V+E)logV)| always processing the node with the lowest cost in the frontier|
-|							 |				(binary heap)	 |			  |																   |
+| Route finding				 |	Dijkstra + priority queue (binary heap)	 |O((V+E)logV)| always processing the node with the lowest cost in the frontier|
+							 					 			  																   
 
 
 
@@ -132,7 +132,7 @@ Describe one bug, wrong assumption, failed approach, or surprising result and ho
 ```text
 Indexing in a dictionary for an inexistent key created an entry for that key.
 
-On a medium world, finding a route led to an infinite loop due to a bug in the MinPriorityQueue where I wouldn't exit if there were two entries with equal or lower priorities.
+On a medium world, finding a route led to an infinite loop due to a bug in the MinPriorityQueue where it wouldn't exit if there were two entries with equal or lower priorities.
 I investigated it by debugging and found that the index never changed from 0, thus never exiting from the loop. Added a break on the correct condition.
 
 ```
