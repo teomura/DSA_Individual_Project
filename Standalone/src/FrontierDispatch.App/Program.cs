@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using FrontierDispatch.Core;
+using System.Collections.Generic;
 
 if (args.Length > 0 && args[0] == "--baseline")
 {
@@ -21,6 +22,8 @@ Console.WriteLine("Run with --baseline to record the supplied baseline workload.
 
 var finder = new DijkstraRouteFinder(WorldDatasetFactory.CreateSmall());
 RouteResult result = finder.FindRoute(0, 24);
+var reachability = new ReachabilityQuery(WorldDatasetFactory.CreateSmall());
+IReadOnlyDictionary<int, int> reachableLocations = reachability.FindReachable(0, 10);
 
 static void RunBaseline()
 {

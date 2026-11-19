@@ -66,7 +66,7 @@ namespace FrontierDispatch.Core
                 int priority = frontier.LowestPriority();
                 int entry = frontier.Dequeue();
 
-                if (bestCost.TryGetValue(entry, out int cost) && cost != priority)// ignore the stale entries
+                if (bestCost.TryGetValue(entry, out int cost) && cost != priority)
                 {
                     continue;
                 }

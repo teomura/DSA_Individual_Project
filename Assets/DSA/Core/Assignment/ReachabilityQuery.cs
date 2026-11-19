@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace FrontierDispatch.Core
 {
@@ -39,7 +40,63 @@ namespace FrontierDispatch.Core
         public IReadOnlyDictionary<int, int> FindReachable(int startLocationId, int maxTravelCost)
         {
             // TODO: adapt shortest-path reasoning to the travel-cost budget.
-            throw new NotImplementedException();
+
+            WorldQueries queries = new WorldQueries(_world);
+            if (queries == null)
+            {
+                throw new ArgumentNullException(nameof(queries));
+            }
+
+            var bestCost = new Dictionary<int, int>();
+
+            if (maxTravelCost < 0)
+            {
+                return bestCost;
+            }
+            var cameFrom = new Dictionary<int, int>();
+            var frontier = new MinPriorityQueue<int>();
+
+            bestCost[startLocationId] = 0;
+            frontier.Enqueue(startLocationId, 0);
+
+            int expandedNodes = 0;
+
+            while (frontier.Count > 0)
+            {
+                int priority = frontier.LowestPriority();
+                int entry = frontier.Dequeue();
+
+                if (bestCost.TryGetValue(entry, out int cost) && cost != priority)
+                {
+                    continue;
+                }
+
+                expandedNodes++;
+
+                if (expandedNodes >= _world.Locations.Count)
+                {
+                    foreach (int key in bestCost.Keys)
+                    {
+                        if (bestCost[key] > maxTravelCost)
+                        {
+                            bestCost.Remove(key);
+                        }
+                    }
+                    return bestCost;
+                }
+
+                foreach (Connection edge in queries.FindOutgoingConnections(entry))
+                {
+                    int candidate = bestCost[entry] + edge.TravelCost;
+                    if (!bestCost.TryGetValue(edge.ToLocationId, out int knownCost) || knownCost > candidate)
+                    {
+                        bestCost[edge.ToLocationId] = candidate;
+                        cameFrom[edge.ToLocationId] = entry;
+                        frontier.Enqueue(edge.ToLocationId, candidate);
+                    }
+                }
+            }
+            return bestCost;
         }
     }
 }
