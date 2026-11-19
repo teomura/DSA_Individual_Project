@@ -47,6 +47,36 @@ namespace FrontierDispatch.Tests
         }
 
         [Test]
+        public void Dijkstra_MediumWorld_ReturnsRouteNotFound()
+        {
+            var finder = new DijkstraRouteFinder(WorldDatasetFactory.CreateMedium());
+            RouteResult result = finder.FindRoute(0, 5000);
+            Assert.That(result.Found, Is.False);
+            Assert.That(result.TotalCost, Is.EqualTo(0));
+            Assert.That(result.LocationIds, Is.Empty);
+        }
+
+        [Test]
+        public void Dijkstra_SmallDisconnectedWorld_ReturnsRouteNotFound()
+        {
+            var finder = new DijkstraRouteFinder(SampleWorldFactory.CreateDisconnectedSmall());
+            RouteResult result = finder.FindRoute(101, 901);
+            Assert.That(result.Found, Is.False);
+            Assert.That(result.TotalCost, Is.EqualTo(0));
+            Assert.That(result.LocationIds, Is.Empty);
+        }
+
+        [Test]
+        public void Dijkstra_SmallWorldWithOneWay_ReturnsAlternateLongerRoute()
+        {
+            var finder = new DijkstraRouteFinder(SampleWorldFactory.CreateSmallWithOneWay());
+            RouteResult result = finder.FindRoute(101, 901);
+            Assert.That(result.Found, Is.True);
+            Assert.That(result.TotalCost, Is.EqualTo(21));
+            Assert.That(result.LocationIds, Is.EqualTo(new[] { 101, 310, 512, 734, 901 }));
+        }
+
+        [Test]
         public void Reachability_ZeroBudget_IncludesStartAtZeroCost()
         {
             var query = new ReachabilityQuery(WorldDatasetFactory.CreateSmall());
