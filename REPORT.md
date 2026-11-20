@@ -103,13 +103,13 @@ thus ensuring bestCost contains only the nodes within budget and best cost to re
 
 Important tests/edge cases and what they demonstrate.
 
-
-| ---										| ---								| ---		|
-|Dijkstra_MediumWorld_ReturnsLowestCostRoute| Functionality check, finding cheapest route between two connected Locations| Revealed a bug (see #7), returned cheapest route after fixing.|
-|Dijkstra_MediumWorld_ReturnsRouteNotFound| Checking for a route to non existent Location| No route was found.|
-|Dijkstra_SmallDisconnectedWorld_ReturnsRouteNotFound| Checking for route to a disconnected Location| No route was found.|
-|Dijkstra_SmallWorldWithOneWay_ReturnsAlternateLongerRoute| Expected to respect directionality and cheapest cost and to go through Crossroads(310) and not Relay(205)| Performed as expected.|
-|Reachability_Budget10_BasicFunctionality| Functionality check| Returned the correct Locations and their costs under a max cost of 10.|
+| Test | Expected result | Observed result |
+| --- | --- | --- |
+| Dijkstra_MediumWorld_ReturnsLowestCostRoute | Functionality check, finding cheapest route between two connected Locations | Revealed a bug (see #7), returned cheapest route after fixing. |
+| Dijkstra_MediumWorld_ReturnsRouteNotFound | Checking for a route to non existent Location | No route was found. |
+| Dijkstra_SmallDisconnectedWorld_ReturnsRouteNotFound | Checking for route to a disconnected Location | No route was found. |
+| Dijkstra_SmallWorldWithOneWay_ReturnsAlternateLongerRoute | Expected to respect directionality and cheapest cost and to go through Crossroads(310) and not Relay(205) | Performed as expected. |
+| Reachability_Budget10_BasicFunctionality | Functionality check | Returned the correct Locations and their costs under a max cost of 10. |
 
 
 
