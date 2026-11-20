@@ -104,7 +104,7 @@ thus ensuring bestCost contains only the nodes within budget and best cost to re
 Important tests/edge cases and what they demonstrate.
 
 
-
+| ---										| ---								| ---		|
 |Dijkstra_MediumWorld_ReturnsLowestCostRoute| Functionality check, finding cheapest route between two connected Locations| Revealed a bug (see #7), returned cheapest route after fixing.|
 |Dijkstra_MediumWorld_ReturnsRouteNotFound| Checking for a route to non existent Location| No route was found.|
 |Dijkstra_SmallDisconnectedWorld_ReturnsRouteNotFound| Checking for route to a disconnected Location| No route was found.|
