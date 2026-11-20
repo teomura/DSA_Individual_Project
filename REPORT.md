@@ -23,7 +23,7 @@ Checksum: 6267100
 
 - Arrays of Locations and Connections
 - FindLocation and FindConnection (looping through all elements and comparisons)
-- Looping through elements
+- Looping through Locations and Connections in WorldData.
 - Improve Connection storage in WorldQueries.cs
 ```
 
@@ -54,7 +54,8 @@ Elapsed creation: 3,2387 ms
 Elapsed: 0,6565 ms
 Checksum: 6267100
 
-Traded-off increased memory usage due to two additional containers for a lower execution time. Spent more execution time at creating the containers.
+Traded-off increased memory usage due to two additional containers for a lower execution time. 
+Spent more execution time at creating the containers.
 ```
 
 
@@ -65,15 +66,22 @@ Explain your route finder at a useful high level and how the travel-budget query
 ```text
 The route finding algorithm is Dijkstra's shortest path algorithm (uses BFS to process Locations).
 It goes through each Location and looks if there's a better cost found to its neighbors and updates it (the cost) accordingly.
-Frontier is a MinPriorityQueue containing the unprocessed Locations and the best cost from the current Location, but can also contain previous entries with potentially stale costs.
+
+Frontier is a MinPriorityQueue containing the unprocessed Locations and the best cost from the current Location, 
+but can also contain previous entries with potentially stale costs.
+
 The next candidate is the Location with the lowest known cost to it.
-The best cost to a Location is stored in a Dictionary. It's tracked when a Location is first processed and potentially when a better candidate is found. This is also known as relaxation, which also updates how this location was reached (cameFrom).
-Once the processing reaches the goal Location the algorithm will reconstruct the path backwards based on "cameFrom" entries and then reverse it to get the path in the correct order.
+
+The best cost to a Location is stored in a Dictionary. It's tracked when a Location is first processed and potentially when a 
+better candidate is found. This is also known as relaxation, which also updates how this location was reached (cameFrom).
+Once the processing reaches the goal Location the algorithm will reconstruct the path backwards based on "cameFrom" entries,
+and then reverse it to get the path in the correct order.
 It will also output the best cost to the Location and the number of Locations processed to get there.
 
 The reachability algorithm uses the same base Dijkstra approach but instead of stopping when reaching the goal,
-it stops when there are no more nodes to process. Also, it doesn't add to bestCost the neighbors of a node that have a candidate cost larger than the budget cost, thus ensuring bestCost contains only the nodes within budget
-and best cost to reach them.
+it stops when there are no more nodes to process. 
+Also, it doesn't add to bestCost the neighbors of a node that have a candidate cost larger than the budget cost, 
+thus ensuring bestCost contains only the nodes within budget and best cost to reach them.
 ```
 
 
@@ -97,11 +105,11 @@ Important tests/edge cases and what they demonstrate.
 
 
 ```text
-Dijkstra_MediumWorld_ReturnsLowestCostRoute -> functionality check, finding cheapest route between two connected Locations -> revealed a bug (see #7), returned cheapest route after fixing.
-Dijkstra_MediumWorld_ReturnsRouteNotFound -> checking for a route to non existent Location -> no route was found.
-Dijkstra_SmallDisconnectedWorld_ReturnsRouteNotFound -> checking for route to a disconnected Location -> no route was found.
-Dijkstra_SmallWorldWithOneWay_ReturnsAlternateLongerRoute -> expected to respect directionality and cheapest cost and to go through Crossroads(310) and not Relay(205) -> performed as expected.
-Reachability_Budget10_BasicFunctionality -> functionality check -> returned the correct Locations and their costs under a max cost of 10.
+|Dijkstra_MediumWorld_ReturnsLowestCostRoute| Functionality check, finding cheapest route between two connected Locations| Revealed a bug (see #7), returned cheapest route after fixing.|
+|Dijkstra_MediumWorld_ReturnsRouteNotFound| Checking for a route to non existent Location| No route was found.|
+|Dijkstra_SmallDisconnectedWorld_ReturnsRouteNotFound| Checking for route to a disconnected Location| No route was found.|
+|Dijkstra_SmallWorldWithOneWay_ReturnsAlternateLongerRoute| Expected to respect directionality and cheapest cost and to go through Crossroads(310) and not Relay(205)| Performed as expected.|
+|Reachability_Budget10_BasicFunctionality| Functionality check| Returned the correct Locations and their costs under a max cost of 10.|
 ```
 
 
@@ -124,11 +132,17 @@ Tracked allocated bytes with GC before and after world preparation.
 Repeated lookup returned a rounded 0 ms reading which I improved with Elapsed.TotalMilliseconds to 0,6565 ms.
 
 
-World preparation: increased from 2 ms to 3,2387 ms because of adding data to Dictionaries which iterates through all Locations and Connections (O(n)).
-Repeated lookup/query workload: changed storage for Locations and Connections to use Dictionaries for faster average retrieval (O(1)).
-Allocated bytes: increased because of storing a copy of the world data in Dictionaries (WorldQueries._worldConnections and WorldQueries._worldLocations).
+World preparation: increased from 2 ms to 3,2387 ms because of adding data to Dictionaries 
+which iterates through all Locations and Connections (O(n)).
 
-In conclusion, caching data improves execution time in the long run, but requires additional memory and may take time to build it. 
+Repeated lookup/query workload: changed storage for Locations and Connections to use Dictionaries for 
+faster average retrieval (O(1)).
+
+Allocated bytes: increased because of storing a copy of the world data in Dictionaries 
+(WorldQueries._worldConnections and WorldQueries._worldLocations).
+
+In conclusion, caching data improves execution time in the long run, 
+but requires additional memory and may take time to build it. 
 ```
 
 ## 7. Development reflection
@@ -137,8 +151,9 @@ Describe one bug, wrong assumption, failed approach, or surprising result and ho
 
 
 ```text
-On a medium world, finding a route led to an infinite loop due to a bug in the MinPriorityQueue where it wouldn't exit if there were two entries with equal or lower priorities.
-I investigated it by debugging and found that the index never changed from 0, thus never exiting from the loop. Added a break on the correct condition.
+On a medium world, finding a route led to an infinite loop due to a bug in the MinPriorityQueue 
+where it wouldn't exit if there were two entries with equal or lower priorities. I investigated it by debugging 
+and found that the index never changed from 0, thus never exiting from the loop. Added a break on the correct condition.
 
 ```
 
