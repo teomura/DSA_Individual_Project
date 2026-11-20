@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace FrontierDispatch.Core
 {
@@ -49,17 +48,20 @@ namespace FrontierDispatch.Core
 
             var bestCost = new Dictionary<int, int>();
 
+            if (queries.FindLocationById(startLocationId) == null)
+            {
+                return bestCost;
+            }
+
             if (maxTravelCost < 0)
             {
                 return bestCost;
             }
-            var cameFrom = new Dictionary<int, int>();
+
             var frontier = new MinPriorityQueue<int>();
 
             bestCost[startLocationId] = 0;
             frontier.Enqueue(startLocationId, 0);
-
-            int expandedNodes = 0;
 
             while (frontier.Count > 0)
             {
@@ -71,27 +73,18 @@ namespace FrontierDispatch.Core
                     continue;
                 }
 
-                expandedNodes++;
-
-                if (expandedNodes >= _world.Locations.Count)
-                {
-                    foreach (int key in bestCost.Keys)
-                    {
-                        if (bestCost[key] > maxTravelCost)
-                        {
-                            bestCost.Remove(key);
-                        }
-                    }
-                    return bestCost;
-                }
-
                 foreach (Connection edge in queries.FindOutgoingConnections(entry))
                 {
                     int candidate = bestCost[entry] + edge.TravelCost;
+
+                    if (candidate > maxTravelCost)
+                    {
+                        continue;
+                    }
                     if (!bestCost.TryGetValue(edge.ToLocationId, out int knownCost) || knownCost > candidate)
                     {
                         bestCost[edge.ToLocationId] = candidate;
-                        cameFrom[edge.ToLocationId] = entry;
+
                         frontier.Enqueue(edge.ToLocationId, candidate);
                     }
                 }

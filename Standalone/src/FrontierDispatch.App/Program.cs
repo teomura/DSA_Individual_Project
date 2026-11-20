@@ -62,8 +62,8 @@ static void RunBaseline()
     Console.WriteLine($"Connections: {world.Connections.Count}");
     Console.WriteLine($"Iterations: {iterations}");
     Console.WriteLine($"Bytes used: {allocationsAfter - allocationsBefore}");
-    Console.WriteLine($"Elapsed creation: {swCreation.ElapsedMilliseconds} ms");
-    Console.WriteLine($"Elapsed: {sw.ElapsedMilliseconds} ms");
+    Console.WriteLine($"Elapsed creation: {swCreation.Elapsed.TotalMilliseconds} ms");
+    Console.WriteLine($"Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
     Console.WriteLine($"Checksum: {checksum}");
     Console.WriteLine("Absolute time varies by machine. Keep this result for before/after comparison.");
 }

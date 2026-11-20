@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using FrontierDispatch.Core;
 
@@ -83,6 +83,16 @@ namespace FrontierDispatch.Tests
             var result = query.FindReachable(0, 0);
             Assert.That(result.ContainsKey(0), Is.True);
             Assert.That(result[0], Is.EqualTo(0));
+        }
+
+        [Test]
+        public void Reachability_Budget10_BasicFunctionality()
+        {
+            var query = new ReachabilityQuery(WorldDatasetFactory.CreateSmall());
+            var result = query.FindReachable(0, 10);
+            Assert.That(result.Count, Is.EqualTo(5));
+            Assert.That(new List<int>(result.Keys), Is.EqualTo(new[] { 0, 1, 5, 10, 11 }));
+            Assert.That(new List<int>(result.Values), Is.EqualTo(new[] { 0, 9, 5, 7, 10 }));
         }
     }
 }
